@@ -135,10 +135,10 @@ var EtherscanProvider = /** @class */ (function (_super) {
         };
         switch (method) {
             case 'getBlockNumber':
-                url += '/api?module=proxy&action=eth_blockNumber' + apiKey;
+                url += '/api?module=proxy&action=gptc_blockNumber' + apiKey;
                 return get(url);
             case 'getGasPrice':
-                url += '/api?module=proxy&action=eth_gasPrice' + apiKey;
+                url += '/api?module=proxy&action=gptc_gasPrice' + apiKey;
                 return get(url);
             case 'getBalance':
                 // Returns base-10 result
@@ -146,20 +146,20 @@ var EtherscanProvider = /** @class */ (function (_super) {
                 url += '&tag=' + params.blockTag + apiKey;
                 return get(url, getResult);
             case 'getTransactionCount':
-                url += '/api?module=proxy&action=eth_getTransactionCount&address=' + params.address;
+                url += '/api?module=proxy&action=gptc_getTransactionCount&address=' + params.address;
                 url += '&tag=' + params.blockTag + apiKey;
                 return get(url);
             case 'getCode':
-                url += '/api?module=proxy&action=eth_getCode&address=' + params.address;
+                url += '/api?module=proxy&action=gptc_getCode&address=' + params.address;
                 url += '&tag=' + params.blockTag + apiKey;
                 return get(url, getJsonResult);
             case 'getStorageAt':
-                url += '/api?module=proxy&action=eth_getStorageAt&address=' + params.address;
+                url += '/api?module=proxy&action=gptc_getStorageAt&address=' + params.address;
                 url += '&position=' + params.position;
                 url += '&tag=' + params.blockTag + apiKey;
                 return get(url, getJsonResult);
             case 'sendTransaction':
-                url += '/api?module=proxy&action=eth_sendRawTransaction&hex=' + params.signedTransaction;
+                url += '/api?module=proxy&action=gptc_sendRawTransaction&hex=' + params.signedTransaction;
                 url += apiKey;
                 return get(url).catch(function (error) {
                     if (error.responseText) {
@@ -180,7 +180,7 @@ var EtherscanProvider = /** @class */ (function (_super) {
                 });
             case 'getBlock':
                 if (params.blockTag) {
-                    url += '/api?module=proxy&action=eth_getBlockByNumber&tag=' + params.blockTag;
+                    url += '/api?module=proxy&action=gptc_getBlockByNumber&tag=' + params.blockTag;
                     if (params.includeTransactions) {
                         url += '&boolean=true';
                     }
@@ -192,11 +192,11 @@ var EtherscanProvider = /** @class */ (function (_super) {
                 }
                 return Promise.reject(new Error('getBlock by blockHash not implemeneted'));
             case 'getTransaction':
-                url += '/api?module=proxy&action=eth_getTransactionByHash&txhash=' + params.transactionHash;
+                url += '/api?module=proxy&action=gptc_getTransactionByHash&txhash=' + params.transactionHash;
                 url += apiKey;
                 return get(url);
             case 'getTransactionReceipt':
-                url += '/api?module=proxy&action=eth_getTransactionReceipt&txhash=' + params.transactionHash;
+                url += '/api?module=proxy&action=gptc_getTransactionReceipt&txhash=' + params.transactionHash;
                 url += apiKey;
                 return get(url);
             case 'call': {
@@ -204,7 +204,7 @@ var EtherscanProvider = /** @class */ (function (_super) {
                 if (transaction) {
                     transaction = '&' + transaction;
                 }
-                url += '/api?module=proxy&action=eth_call' + transaction;
+                url += '/api?module=proxy&action=gptc_call' + transaction;
                 //url += '&tag=' + params.blockTag + apiKey;
                 if (params.blockTag !== 'latest') {
                     return Promise.reject(new Error('EtherscanProvider does not support blockTag for call'));
@@ -217,7 +217,7 @@ var EtherscanProvider = /** @class */ (function (_super) {
                 if (transaction) {
                     transaction = '&' + transaction;
                 }
-                url += '/api?module=proxy&action=eth_estimateGas&' + transaction;
+                url += '/api?module=proxy&action=gptc_estimateGas&' + transaction;
                 url += apiKey;
                 return get(url);
             }

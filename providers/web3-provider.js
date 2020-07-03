@@ -53,8 +53,8 @@ var Web3Provider = /** @class */ (function (_super) {
     }
     Web3Provider.prototype.send = function (method, params) {
         var _this = this;
-        // Metamask complains about eth_sign (and on some versions hangs)
-        if (method == 'eth_sign' && this._web3Provider.isMetaMask) {
+        // Metamask complains about gptc_sign (and on some versions hangs)
+        if (method == 'gptc_sign' && this._web3Provider.isMetaMask) {
             // https://github.com/ethereum/go-ethereum/wiki/Management-APIs#personal_sign
             method = 'personal_sign';
             params = [params[1], params[0]];
