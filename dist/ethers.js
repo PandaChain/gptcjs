@@ -11458,10 +11458,10 @@ var EtherscanProvider = /** @class */ (function (_super) {
         };
         switch (method) {
             case 'getBlockNumber':
-                url += '/api?module=proxy&action=eth_blockNumber' + apiKey;
+                url += '/api?module=proxy&action=gptc_blockNumber' + apiKey;
                 return get(url);
             case 'getGasPrice':
-                url += '/api?module=proxy&action=eth_gasPrice' + apiKey;
+                url += '/api?module=proxy&action=gptc_gasPrice' + apiKey;
                 return get(url);
             case 'getBalance':
                 // Returns base-10 result
@@ -11469,20 +11469,20 @@ var EtherscanProvider = /** @class */ (function (_super) {
                 url += '&tag=' + params.blockTag + apiKey;
                 return get(url, getResult);
             case 'getTransactionCount':
-                url += '/api?module=proxy&action=eth_getTransactionCount&address=' + params.address;
+                url += '/api?module=proxy&action=gptc_getTransactionCount&address=' + params.address;
                 url += '&tag=' + params.blockTag + apiKey;
                 return get(url);
             case 'getCode':
-                url += '/api?module=proxy&action=eth_getCode&address=' + params.address;
+                url += '/api?module=proxy&action=gptc_getCode&address=' + params.address;
                 url += '&tag=' + params.blockTag + apiKey;
                 return get(url, getJsonResult);
             case 'getStorageAt':
-                url += '/api?module=proxy&action=eth_getStorageAt&address=' + params.address;
+                url += '/api?module=proxy&action=gptc_getStorageAt&address=' + params.address;
                 url += '&position=' + params.position;
                 url += '&tag=' + params.blockTag + apiKey;
                 return get(url, getJsonResult);
             case 'sendTransaction':
-                url += '/api?module=proxy&action=eth_sendRawTransaction&hex=' + params.signedTransaction;
+                url += '/api?module=proxy&action=gptc_sendRawTransaction&hex=' + params.signedTransaction;
                 url += apiKey;
                 return get(url).catch(function (error) {
                     if (error.responseText) {
@@ -11503,7 +11503,7 @@ var EtherscanProvider = /** @class */ (function (_super) {
                 });
             case 'getBlock':
                 if (params.blockTag) {
-                    url += '/api?module=proxy&action=eth_getBlockByNumber&tag=' + params.blockTag;
+                    url += '/api?module=proxy&action=gptc_getBlockByNumber&tag=' + params.blockTag;
                     if (params.includeTransactions) {
                         url += '&boolean=true';
                     }
@@ -11515,11 +11515,11 @@ var EtherscanProvider = /** @class */ (function (_super) {
                 }
                 return Promise.reject(new Error('getBlock by blockHash not implemeneted'));
             case 'getTransaction':
-                url += '/api?module=proxy&action=eth_getTransactionByHash&txhash=' + params.transactionHash;
+                url += '/api?module=proxy&action=gptc_getTransactionByHash&txhash=' + params.transactionHash;
                 url += apiKey;
                 return get(url);
             case 'getTransactionReceipt':
-                url += '/api?module=proxy&action=eth_getTransactionReceipt&txhash=' + params.transactionHash;
+                url += '/api?module=proxy&action=gptc_getTransactionReceipt&txhash=' + params.transactionHash;
                 url += apiKey;
                 return get(url);
             case 'call': {
@@ -11527,7 +11527,7 @@ var EtherscanProvider = /** @class */ (function (_super) {
                 if (transaction) {
                     transaction = '&' + transaction;
                 }
-                url += '/api?module=proxy&action=eth_call' + transaction;
+                url += '/api?module=proxy&action=gptc_call' + transaction;
                 //url += '&tag=' + params.blockTag + apiKey;
                 if (params.blockTag !== 'latest') {
                     return Promise.reject(new Error('EtherscanProvider does not support blockTag for call'));
@@ -11540,7 +11540,7 @@ var EtherscanProvider = /** @class */ (function (_super) {
                 if (transaction) {
                     transaction = '&' + transaction;
                 }
-                url += '/api?module=proxy&action=eth_estimateGas&' + transaction;
+                url += '/api?module=proxy&action=gptc_estimateGas&' + transaction;
                 url += apiKey;
                 return get(url);
             }
@@ -11983,7 +11983,7 @@ var JsonRpcSigner = /** @class */ (function (_super) {
         if (this._address) {
             return Promise.resolve(this._address);
         }
-        return this.provider.send('eth_accounts', []).then(function (accounts) {
+        return this.provider.send('gptc_accounts', []).then(function (accounts) {
             if (accounts.length <= _this._index) {
                 errors.throwError('unknown account #' + _this._index, errors.UNSUPPORTED_OPERATION, { operation: 'getAddress' });
             }
@@ -12006,7 +12006,7 @@ var JsonRpcSigner = /** @class */ (function (_super) {
             }
             return address;
         });
-        // The JSON-RPC for eth_sendTransaction uses 90000 gas; if the user
+        // The JSON-RPC for gptc_sendTransaction uses 90000 gas; if the user
         // wishes to use this, it is easy to specify explicitly, otherwise
         // we look it up for them.
         if (transaction.gasLimit == null) {
@@ -12021,7 +12021,7 @@ var JsonRpcSigner = /** @class */ (function (_super) {
             var tx = results[0];
             var hexTx = JsonRpcProvider.hexlifyTransaction(tx);
             hexTx.from = results[1];
-            return _this.provider.send('eth_sendTransaction', [hexTx]).then(function (hash) {
+            return _this.provider.send('gptc_sendTransaction', [hexTx]).then(function (hash) {
                 return hash;
             }, function (error) {
                 if (error.responseText) {
@@ -12066,8 +12066,8 @@ var JsonRpcSigner = /** @class */ (function (_super) {
         var _this = this;
         var data = ((typeof (message) === 'string') ? utf8_1.toUtf8Bytes(message) : message);
         return this.getAddress().then(function (address) {
-            // https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_sign
-            return _this.provider.send('eth_sign', [address.toLowerCase(), bytes_1.hexlify(data)]);
+            // https://github.com/ethereum/wiki/wiki/JSON-RPC#gptc_sign
+            return _this.provider.send('gptc_sign', [address.toLowerCase(), bytes_1.hexlify(data)]);
         });
     };
     JsonRpcSigner.prototype.unlock = function (password) {
@@ -12129,7 +12129,7 @@ var JsonRpcProvider = /** @class */ (function (_super) {
         return new JsonRpcSigner(_constructorGuard, this, addressOrIndex);
     };
     JsonRpcProvider.prototype.listAccounts = function () {
-        return this.send('eth_accounts', []).then(function (accounts) {
+        return this.send('gptc_accounts', []).then(function (accounts) {
             return accounts.map(function (a) { return address_1.getAddress(a); });
         });
     };
@@ -12154,19 +12154,19 @@ var JsonRpcProvider = /** @class */ (function (_super) {
     JsonRpcProvider.prototype.perform = function (method, params) {
         switch (method) {
             case 'getBlockNumber':
-                return this.send('eth_blockNumber', []);
+                return this.send('gptc_blockNumber', []);
             case 'getGasPrice':
-                return this.send('eth_gasPrice', []);
+                return this.send('gptc_gasPrice', []);
             case 'getBalance':
-                return this.send('eth_getBalance', [getLowerCase(params.address), params.blockTag]);
+                return this.send('gptc_getBalance', [getLowerCase(params.address), params.blockTag]);
             case 'getTransactionCount':
-                return this.send('eth_getTransactionCount', [getLowerCase(params.address), params.blockTag]);
+                return this.send('gptc_getTransactionCount', [getLowerCase(params.address), params.blockTag]);
             case 'getCode':
-                return this.send('eth_getCode', [getLowerCase(params.address), params.blockTag]);
+                return this.send('gptc_getCode', [getLowerCase(params.address), params.blockTag]);
             case 'getStorageAt':
-                return this.send('eth_getStorageAt', [getLowerCase(params.address), params.position, params.blockTag]);
+                return this.send('gptc_getStorageAt', [getLowerCase(params.address), params.position, params.blockTag]);
             case 'sendTransaction':
-                return this.send('eth_sendRawTransaction', [params.signedTransaction]).catch(function (error) {
+                return this.send('gptc_sendRawTransaction', [params.signedTransaction]).catch(function (error) {
                     if (error.responseText) {
                         // "insufficient funds for gas * price + value"
                         if (error.responseText.indexOf('insufficient funds') > 0) {
@@ -12185,25 +12185,25 @@ var JsonRpcProvider = /** @class */ (function (_super) {
                 });
             case 'getBlock':
                 if (params.blockTag) {
-                    return this.send('eth_getBlockByNumber', [params.blockTag, !!params.includeTransactions]);
+                    return this.send('gptc_getBlockByNumber', [params.blockTag, !!params.includeTransactions]);
                 }
                 else if (params.blockHash) {
-                    return this.send('eth_getBlockByHash', [params.blockHash, !!params.includeTransactions]);
+                    return this.send('gptc_getBlockByHash', [params.blockHash, !!params.includeTransactions]);
                 }
                 return Promise.reject(new Error('invalid block tag or block hash'));
             case 'getTransaction':
-                return this.send('eth_getTransactionByHash', [params.transactionHash]);
+                return this.send('gptc_getTransactionByHash', [params.transactionHash]);
             case 'getTransactionReceipt':
-                return this.send('eth_getTransactionReceipt', [params.transactionHash]);
+                return this.send('gptc_getTransactionReceipt', [params.transactionHash]);
             case 'call':
-                return this.send('eth_call', [JsonRpcProvider.hexlifyTransaction(params.transaction, { from: true }), params.blockTag]);
+                return this.send('gptc_call', [JsonRpcProvider.hexlifyTransaction(params.transaction, { from: true }), params.blockTag]);
             case 'estimateGas':
-                return this.send('eth_estimateGas', [JsonRpcProvider.hexlifyTransaction(params.transaction, { from: true })]);
+                return this.send('gptc_estimateGas', [JsonRpcProvider.hexlifyTransaction(params.transaction, { from: true })]);
             case 'getLogs':
                 if (params.filter && params.filter.address != null) {
                     params.filter.address = getLowerCase(params.filter.address);
                 }
-                return this.send('eth_getLogs', [params.filter]);
+                return this.send('gptc_getLogs', [params.filter]);
             default:
                 break;
         }
@@ -12215,11 +12215,11 @@ var JsonRpcProvider = /** @class */ (function (_super) {
             return;
         }
         var self = this;
-        var pendingFilter = this.send('eth_newPendingTransactionFilter', []);
+        var pendingFilter = this.send('gptc_newPendingTransactionFilter', []);
         this._pendingFilter = pendingFilter;
         pendingFilter.then(function (filterId) {
             function poll() {
-                self.send('eth_getFilterChanges', [filterId]).then(function (hashes) {
+                self.send('gptc_getFilterChanges', [filterId]).then(function (hashes) {
                     if (self._pendingFilter != pendingFilter) {
                         return null;
                     }
@@ -12239,7 +12239,7 @@ var JsonRpcProvider = /** @class */ (function (_super) {
                     });
                 }).then(function () {
                     if (self._pendingFilter != pendingFilter) {
-                        self.send('eth_uninstallFilter', [filterId]);
+                        self.send('gptc_uninstallFilter', [filterId]);
                         return;
                     }
                     setTimeout(function () { poll(); }, 0);
@@ -12350,8 +12350,8 @@ var Web3Provider = /** @class */ (function (_super) {
     }
     Web3Provider.prototype.send = function (method, params) {
         var _this = this;
-        // Metamask complains about eth_sign (and on some versions hangs)
-        if (method == 'eth_sign' && this._web3Provider.isMetaMask) {
+        // Metamask complains about gptc_sign (and on some versions hangs)
+        if (method == 'gptc_sign' && this._web3Provider.isMetaMask) {
             // https://github.com/ethereum/go-ethereum/wiki/Management-APIs#personal_sign
             method = 'personal_sign';
             params = [params[1], params[0]];
