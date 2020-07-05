@@ -1,7 +1,7 @@
 {
-  "name": "ethers",
-  "version": "4.0.47",
-  "description": "Ethereum wallet library.",
+  "name": "pandachainjs",
+  "version": "1.0.0",
+  "description": "Panda wallet library.",
   "main": "./index.js",
   "types": "./index.d.ts",
   "scripts": {

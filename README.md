@@ -15,7 +15,7 @@
 To use in [node.js](https://nodejs.org/):
 
 ```
-/Users/panda/my-app> npm install --save ethers
+/Users/panda/my-app> npm install --save pandachainjs
 ```
 
 
